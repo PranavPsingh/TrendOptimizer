@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smart Trend Optimizer</title>
+  <style>
+    :root{
+      --bg: #0b0d10;           /* page background */
+      --card: #12151a;         /* card background */
+      --muted: #9aa3ad;        /* secondary text */
+      --text: #e8eef5;         /* primary text */
+      --accent: #6aa6ff;       /* accent color */
+      --accent-2: #9d7aff;     /* secondary accent */
+      --ring: #7fb7ff;         /* focus ring */
+      --ok: #2ecc71;           /* success */
+      --warn: #f39c12;         /* warning */
+      --err: #e74c3c;          /* error */
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 16px;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root{
+        --bg: #f5f7fb;
+        --card: #ffffff;
+        --muted: #6b7280;
+        --text: #0f172a;
+        --accent: #2563eb;
+        --accent-2: #7c3aed;
+        --ring: #60a5fa;
+        --shadow: 0 12px 28px rgba(2,6,23,.08);
+      }
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height: 1.6;
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 10% -10%, rgba(109,76,255,.25), transparent 60%),
+                  radial-gradient(1000px 600px at 100% 10%, rgba(37,99,235,.25), transparent 50%),
+                  var(--bg);
+    }
+
+    .wrapper{
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+
+    header{
+      text-align: center;
+      margin: 10px 0 28px;
+    }
+
+    .title{
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.2;
+      margin: 0 0 10px;
+      letter-spacing: -0.02em;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle{
+      margin: 0 auto;
+      max-width: 60ch;
+      color: var(--muted);
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0)) padding-box,
+                  linear-gradient(135deg, rgba(255,255,255,.2), rgba(255,255,255,0)) border-box,
+                  var(--card);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    form{
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    @media (min-width: 720px){
+      .grid{
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    label{
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .help{ color: var(--muted); font-size: 0.95rem; margin-top: 6px; }
+
+    textarea, input[type="file"]{
+      width: 100%;
+      color: var(--text);
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 14px;
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    textarea{
+      min-height: 160px;
+      resize: vertical;
+    }
+
+    textarea:focus, input[type="file"]:focus{
+      border-color: var(--ring);
+      box-shadow: 0 0 0 4px color-mix(in oklab, var(--ring) 35%, transparent);
+      background: rgba(255,255,255,.06);
+    }
+
+    /* Modern file input styling */
+    input[type="file"]{
+      padding: 10px;
+    }
+    input[type="file"]::file-selector-button{
+      margin-right: 14px;
+      padding: 10px 14px;
+      border: 0;
+      border-radius: 12px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .06s ease, filter .2s ease;
+    }
+    input[type="file"]::file-selector-button:hover{ filter: brightness(1.05); }
+    input[type="file"]::file-selector-button:active{ transform: translateY(1px); }
+
+    .actions{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .btn{
+      appearance: none;
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .06s ease, filter .2s ease, box-shadow .2s ease;
+      will-change: transform;
+    }
+
+    .btn-primary{
+      color: white;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      box-shadow: 0 8px 18px rgba(109,76,255,.35);
+    }
+    .btn-primary:hover{ filter: brightness(1.06); }
+    .btn-primary:active{ transform: translateY(1px); }
+
+    .btn-ghost{
+      color: var(--text);
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.15);
+    }
+
+    .section{
+      margin-top: 28px;
+    }
+
+    .results{
+      white-space: pre-wrap;
+      padding: 18px;
+      background: rgba(255,255,255,.04);
+      border: 1px dashed rgba(255,255,255,.15);
+      border-radius: 12px;
+      overflow: auto;
+    }
+
+    /* Improve focus visibility for keyboard users */
+    :focus-visible{
+      outline: none;
+      box-shadow: 0 0 0 4px color-mix(in oklab, var(--ring) 35%, transparent);
+    }
+
+    /* Subtle footer */
+    footer{
+      color: var(--muted);
+      text-align: center;
+      margin-top: 28px;
+      font-size: .95rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <h1 class="title">Smart Trend Optimizer</h1>
+      <p class="subtitle">Analyze your post text and optionally include media (images or videos). Clean, fast, and accessible — no JavaScript required.</p>
+    </header>
+
+    <main class="card" role="main">
+      <form action="/marketing/optimize/" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <section class="section">
+          <label for="text">Text (optional)</label>
+          <textarea id="text" name="text" placeholder="Paste your caption, script, or description here..."></textarea>
+          <p class="help" id="text-help">Tip: Include target audience and platform if known.</p>
+        </section>
+
+        <section class="section">
+          <label for="files">Media files (optional)</label>
+          <input id="files" name="files" type="file" multiple aria-describedby="files-help">
+          <p class="help" id="files-help">You can upload multiple images or videos. Max size depends on server settings.</p>
+        </section>
+
+        <div class="actions">
+          <button type="submit" class="btn btn-primary">Run Optimizer</button>
+          <button type="reset" class="btn btn-ghost">Reset</button>
+        </div>
+      </form>
+    </main>
+
+    {% if suggestions %}
+    <section class="section">
+      <h2 class="title" style="font-size: clamp(22px, 3vw, 28px);">Results</h2>
+      <div class="results">{{ suggestions }}</div>
+    </section>
+    {% endif %}
+
+    <footer>
+      <p>Built for speed • Keyboard & screen‑reader friendly • Auto light/dark</p>
+    </footer>
+  </div>
+</body>
+</html>
